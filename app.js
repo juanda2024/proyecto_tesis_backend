@@ -6,6 +6,7 @@ var logger = require('morgan');
 mu = require('./lib/utils/mongo.js');
 
 var usersRouter = require('./routes/users');
+var getDataRouter = require('./routes/getdata');
 
 var app = express();
 
@@ -17,5 +18,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/users", usersRouter);
+app.use("/getdata", getDataRouter);
 
 module.exports = app;
