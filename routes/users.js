@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 require('dotenv').config();
 const auth = require("../middleware/auth");
-var [getUserById, getUserByEmail, getUserByUsername, createUser, updateUserPassword, updateUserEmail, updateUserUsername, deleteUser] = require('../controllers/users');
+var [getUserById, getUserByEmail, getUserByUsername, createUser, updateUserPassword, updateUserEmail, updateUserUsername, addProyect, deleteUser] = require('../controllers/users');
 
 const user_structure = Joi.object({
 
@@ -49,6 +49,11 @@ const email_dto = Joi.object({
 
 const username_dto = Joi.object({
     username: Joi.string()
+        .required()
+});
+
+const newProyect_dto = Joi.object({
+    id: Joi.string()
         .required()
 });
 
@@ -266,6 +271,39 @@ router.put('/username/:id', auth, async function (req, res, next) {
             var resultado = await updateUserUsername(req.params.id, req.body.username).then((result) => {
                 if (result[0] !== 0) {
                     res.status(200).send({ message: "The user´s username was updated succesfully!" });
+                }
+            });
+        }
+    }
+});
+
+/* PUT user: add a user´s proyect */
+router.put('/addProyect/:id', auth, async function (req, res, next) {
+    res.set('Access-Control-Allow-Origin', '*');
+    var bool = true;
+    var verificacion = await getUserById(req.params.id).then((result) => {
+        if (result === null || result[0] == null) {
+            bool = false;
+            return res.status(404).send({ message: "The user with the given id was not found."});
+        }
+        else if(req.params.id !== req.user.user_id){
+            bool = false;
+            return res.status(404).send({ message: "You dont have permissions to do this."});
+        }
+    });
+    if (bool == true) {
+        const { error } = newProyect_dto.validate
+            ({
+                id: req.body.id
+            });
+
+        if (error) {
+            return res.status(400).send({ message: error });
+        }
+        else {
+            var resultado = await addProyect(req.params.id, req.body.id).then((result) => {
+                if (result[0] !== 0) {
+                    res.status(200).send({ message: "The user`s proyect was added succesfully!" });
                 }
             });
         }

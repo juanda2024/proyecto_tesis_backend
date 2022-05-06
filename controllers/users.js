@@ -55,10 +55,19 @@ function updateUserUsername(id, username) {
     });
 }
 
+function addProyect(id, proyect_id) {
+    return mdbconn.conn().then((client) => {
+        return client.db(database).collection(collection).updateOne(
+            { _id: ObjectId(id) },
+            { $push: { proyects: ObjectId(proyect_id) } }
+        )
+    });
+}
+
 function deleteUser(id) {
     return mdbconn.conn().then((client) => {
         return client.db(database).collection(collection).deleteOne({ _id: ObjectId(id) })
     });
 }
 
-module.exports = [getUserById, getUserByEmail, getUserByUsername, createUser, updateUserPassword, updateUserEmail, updateUserUsername, deleteUser];
+module.exports = [getUserById, getUserByEmail, getUserByUsername, createUser, updateUserPassword, updateUserEmail, updateUserUsername, addProyect, deleteUser];
