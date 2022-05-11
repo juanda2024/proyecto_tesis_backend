@@ -41,7 +41,6 @@ router.post('/obtaininfo/', async function (req, res, next) {
         return res.status(400).send({ message: error });
     }
     else {
-        //var connectionString = "postgres://" + req.body.username + ":" + req.body.password + "@" + req.body.host + ":" + req.body.port + "/" + req.body.databaseName;
         var pgClient = new pg.Client({
             user: req.body.username,
             password: req.body.password,
@@ -50,16 +49,7 @@ router.post('/obtaininfo/', async function (req, res, next) {
             host: req.body.host,
             ssl: { rejectUnauthorized: false }
         }); 
-        //console.log(connectionString);
-        //var pgClient = new pg.Client(connectionString);
         await pgClient.connect();
-        //var res = await pgClient.query(req.body.query);
-        //console.log('---------------------------------------------------------------------');
-        //console.log(res.rowCount)
-        // res.rows.forEach(row=>{
-        //     //console.log(row);
-        // });
-        //await pgClient.end();
         const rta = await pgClient.query(req.body.query).then((result) => {
             if (result === null) {
                 return res.status(404).send({ message: "Query error." });
@@ -68,7 +58,6 @@ router.post('/obtaininfo/', async function (req, res, next) {
             var finalResult = []
             for(var i = 0; i<numberRows/10 - 1; i++){
                 finalResult.push(result.rows[i])
-                console.log(result.rows[i])
             }
             pgClient.end();
             res.status(200).send(finalResult);
