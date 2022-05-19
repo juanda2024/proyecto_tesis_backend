@@ -7,7 +7,8 @@ mu = require('./lib/utils/mongo.js');
 
 var usersRouter = require('./routes/users');
 var getDataRouter = require('./routes/getdata');
-var proyectsRouter = require('./routes/proyects')
+var proyectsRouter = require('./routes/proyects');
+var suggestionsRouter = require('./routes/suggestions')
 
 var app = express();
 
@@ -21,5 +22,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use("/users", usersRouter);
 app.use("/getdata", getDataRouter);
 app.use("/proyects", proyectsRouter);
+app.use("/suggestions", suggestionsRouter);
 
 module.exports = app;
