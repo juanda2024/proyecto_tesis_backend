@@ -77,10 +77,6 @@ router.post('/register', auth, async function (req, res, next) {
                 findByDatabase = true;
             }
         });
-        if(findByHost && findByDatabase){
-            proyectAlreadyFinded = true;
-            return res.status(404).send({ message: "The user already has this host & database saved on DB."});
-        }
         if (proyectAlreadyFinded == false) {
             var new_proyect =
             {
