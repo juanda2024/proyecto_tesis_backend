@@ -56,7 +56,7 @@ router.post('/obtaininfo/', async function (req, res, next) {
             }
             var numberRows = result.rowCount;
             var finalResult = []
-            for(var i = 0; i<numberRows/10 - 1; i++){
+            for(var i = 0; i<numberRows - 1; i++){
                 finalResult.push(result.rows[i])
             }
             pgClient.end();
